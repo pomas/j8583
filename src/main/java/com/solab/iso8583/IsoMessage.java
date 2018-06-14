@@ -20,9 +20,7 @@ package com.solab.iso8583;
 
 import com.solab.iso8583.util.HexCodec;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.BitSet;
 import java.util.Map;
@@ -36,7 +34,7 @@ import java.util.Map;
  * 
  * @author Enrique Zamudio
  */
-public class IsoMessage {
+public class IsoMessage implements Serializable {
 
 	static final byte[] HEX = new byte[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 

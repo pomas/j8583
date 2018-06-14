@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 package com.solab.iso8583.parse;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.ParseException;
 
 import com.solab.iso8583.CustomField;

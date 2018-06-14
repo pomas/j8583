@@ -18,8 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 package com.solab.iso8583;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -37,7 +36,7 @@ import com.solab.iso8583.util.HexCodec;
  * 
  * @author Enrique Zamudio
  */
-public class IsoValue<T> implements Cloneable {
+public class IsoValue<T> implements Cloneable, Serializable {
 
 	private IsoType type;
 	private T value;

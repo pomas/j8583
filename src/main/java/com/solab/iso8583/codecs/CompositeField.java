@@ -8,9 +8,7 @@ import com.solab.iso8583.parse.FieldParseInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.List;
  * @author Enrique Zamudio
  *         Date: 25/11/13 11:25
  */
-public class CompositeField implements CustomBinaryField<CompositeField> {
+public class CompositeField implements CustomBinaryField<CompositeField>, Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(CompositeField.class);
     /** Stores the subfields. */
