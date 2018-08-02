@@ -488,6 +488,8 @@ public class IsoMessage implements Serializable {
                     sb.append(String.format("%03d", desc.length()));
                 } else if (v.getType() == IsoType.LLLLBIN || v.getType() == IsoType.LLLLVAR) {
                     sb.append(String.format("%04d", desc.length()));
+                } else if (v.getType() == IsoType.LLLLLVAR || v.getType() == IsoType.LLLLLBIN){
+                    sb.append(String.format("%05d", desc.length()));
                 }
                 sb.append(desc);
             }

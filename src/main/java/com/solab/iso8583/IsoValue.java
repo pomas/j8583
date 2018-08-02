@@ -63,7 +63,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 		encoder = custom;
 		type = t;
 		this.value = value;
-		if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR) {
+		if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
 			if (custom == null) {
 				length = value.toString().length();
 			} else {
@@ -78,17 +78,19 @@ public class IsoValue<T> implements Cloneable, Serializable {
 			} else if (t == IsoType.LLLVAR && length > 999) {
 				throw new IllegalArgumentException("LLLVAR can only hold values up to 999 chars");
 			} else if (t == IsoType.LLLLVAR && length > 9999) {
-                throw new IllegalArgumentException("LLLLVAR can only hold values up to 9999 chars");
-            }
-		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN) {
+				throw new IllegalArgumentException("LLLLVAR can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLLVAR && length > 99999) {
+				throw new IllegalArgumentException("LLLLLVAR can only hold values up to 99999 chars");
+			}
+		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN || type == IsoType.LLLLLBIN) {
 			if (custom == null) {
 				if (value instanceof byte[]) {
 					length = ((byte[])value).length;
 				} else {
 					length = value.toString().length() / 2 + (value.toString().length() % 2);
 				}
-            } else if (custom instanceof CustomBinaryField) {
-                length = ((CustomBinaryField<T>)custom).encodeBinaryField(value).length;
+			} else if (custom instanceof CustomBinaryField) {
+					length = ((CustomBinaryField<T>)custom).encodeBinaryField(value).length;
 			} else {
 				String enc = custom.encodeField(value);
 				if (enc == null) {
@@ -100,8 +102,10 @@ public class IsoValue<T> implements Cloneable, Serializable {
 				throw new IllegalArgumentException("LLBIN can only hold values up to 99 chars");
 			} else if (t == IsoType.LLLBIN && length > 999) {
 				throw new IllegalArgumentException("LLLBIN can only hold values up to 999 chars");
-            } else if (t == IsoType.LLLLBIN && length > 9999) {
-                throw new IllegalArgumentException("LLLLBIN can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLBIN && length > 9999) {
+				throw new IllegalArgumentException("LLLLBIN can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLLBIN && length > 99999 ) {
+				throw new IllegalArgumentException("LLLLLBIN can only hold values up to 99999 chars");
 			}
 		} else {
 			length = type.getLength();
@@ -126,7 +130,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 		encoder = custom;
 		if (length == 0 && t.needsLength()) {
 			throw new IllegalArgumentException(String.format("Length must be greater than zero for type %s (value '%s')", t, val));
-		} else if (t == IsoType.LLVAR || t == IsoType.LLLVAR || t == IsoType.LLLLVAR) {
+		} else if (t == IsoType.LLVAR || t == IsoType.LLLVAR || t == IsoType.LLLLVAR || t == IsoType.LLLLLVAR) {
 			if (len == 0) {
 				length = custom == null ? val.toString().length() : custom.encodeField(value).length();
 			}
@@ -134,26 +138,30 @@ public class IsoValue<T> implements Cloneable, Serializable {
 				throw new IllegalArgumentException("LLVAR can only hold values up to 99 chars");
 			} else if (t == IsoType.LLLVAR && length > 999) {
 				throw new IllegalArgumentException("LLLVAR can only hold values up to 999 chars");
-            } else if (t == IsoType.LLLLVAR && length > 9999) {
-                throw new IllegalArgumentException("LLLLVAR can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLVAR && length > 9999) {
+				throw new IllegalArgumentException("LLLLVAR can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLLVAR && length > 99999) {
+				throw new IllegalArgumentException("LLLLLVAR can only hold values up to 99999 chars");
 			}
-		} else if (t == IsoType.LLBIN || t == IsoType.LLLBIN || t == IsoType.LLLLBIN) {
+		} else if (t == IsoType.LLBIN || t == IsoType.LLLBIN || t == IsoType.LLLLBIN || t == IsoType.LLLLLBIN) {
 			if (len == 0) {
-                if (custom == null) {
-                    length = ((byte[])val).length;
-                } else if (custom instanceof CustomBinaryField) {
-                    length = ((CustomBinaryField<T>)custom).encodeBinaryField(value).length;
-                } else {
-                    length = custom.encodeField(value).length();
-                }
+				if (custom == null) {
+					length = ((byte[])val).length;
+				} else if (custom instanceof CustomBinaryField) {
+					length = ((CustomBinaryField<T>)custom).encodeBinaryField(value).length;
+				} else {
+					length = custom.encodeField(value).length();
+				}
 				length = custom == null ? ((byte[])val).length : custom.encodeField(value).length();
 			}
 			if (t == IsoType.LLBIN && length > 99) {
 				throw new IllegalArgumentException("LLBIN can only hold values up to 99 chars");
 			} else if (t == IsoType.LLLBIN && length > 999) {
 				throw new IllegalArgumentException("LLLBIN can only hold values up to 999 chars");
-            } else if (t == IsoType.LLLLBIN && length > 9999) {
-                throw new IllegalArgumentException("LLLLBIN can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLBIN && length > 9999) {
+				throw new IllegalArgumentException("LLLLBIN can only hold values up to 9999 chars");
+			} else if (t == IsoType.LLLLLBIN && length > 99999) {
+				throw new IllegalArgumentException("LLLLBIN can only hold values up to 99999 chars");
 			}
 		}
 	}
@@ -212,7 +220,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 			}
 		} else if (type == IsoType.ALPHA) {
 			return type.format(encoder == null ? value.toString() : encoder.encodeField(value), length);
-		} else if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR) {
+		} else if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
 			return encoder == null ? value.toString() : encoder.encodeField(value);
 		} else if (value instanceof Date) {
 			return type.format((Date)value, tz);
@@ -223,7 +231,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 			} else {
 				return type.format(encoder == null ? value.toString() : encoder.encodeField(value), length * 2);
 			}
-		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN) {
+		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN || type == IsoType.LLLLLBIN) {
 			if (value instanceof byte[]) {
                 final byte[] _v = (byte[])value;
 				return encoder == null ? HexCodec.hexEncode(_v, 0, _v.length) : encoder.encodeField(value);
@@ -270,7 +278,9 @@ public class IsoValue<T> implements Cloneable, Serializable {
                                      final boolean binary, final boolean forceStringEncoding)
             throws IOException {
         final int digits;
-        if (type == IsoType.LLLLBIN || type == IsoType.LLLLVAR) {
+        if(type == IsoType.LLLLLBIN || type == IsoType.LLLLLVAR){
+        		digits = 5;
+				} else if (type == IsoType.LLLLBIN || type == IsoType.LLLLVAR) {
             digits = 4;
         } else if (type == IsoType.LLLBIN || type == IsoType.LLLVAR) {
             digits = 3;
@@ -278,7 +288,9 @@ public class IsoValue<T> implements Cloneable, Serializable {
             digits = 2;
         }
         if (binary) {
-            if (digits == 4) {
+        		if(digits == 5){
+        			outs.write((((l % 100000) / 10000) << 4) | ((l % 10000)/1000));
+						} else if (digits == 4) {
                 outs.write((((l % 10000) / 1000) << 4) | ((l % 1000)/100));
             } else if (digits == 3) {
                 outs.write(l / 100); //00 to 09 automatically in BCD
@@ -294,11 +306,16 @@ public class IsoValue<T> implements Cloneable, Serializable {
                 lhead = "00" + lhead;
             } else if (ldiff == 3) {
                 lhead = "000" + lhead;
-            }
+            } else if (ldiff == 4) {
+            		lhead = "0000" + lhead;
+						}
             outs.write(encoding == null ? lhead.getBytes():lhead.getBytes(encoding));
         } else {
             //write the length in ASCII
-            if (digits == 4) {
+						if(digits == 5){
+							outs.write((l/10000)+48);
+							outs.write(((l%10000)/1000)+48);
+						} else if (digits == 4) {
                 outs.write((l/1000)+48);
                 outs.write(((l%1000)/100)+48);
             } else if (digits == 3) {
@@ -321,9 +338,9 @@ public class IsoValue<T> implements Cloneable, Serializable {
      * for variable-length fields to be done with the proper character encoding. When false,
      * the length headers are encoded as ASCII; this used to be the only behavior. */
 	public void write(final OutputStream outs, final boolean binary, final boolean forceStringEncoding) throws IOException {
-		if (type == IsoType.LLLVAR || type == IsoType.LLVAR || type == IsoType.LLLLVAR) {
+		if (type == IsoType.LLLVAR || type == IsoType.LLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
             writeLengthHeader(length, outs, type, binary, forceStringEncoding);
-		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN) {
+		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN || type == IsoType.LLLLLBIN) {
             writeLengthHeader(binary ? length : length*2, outs, type, binary, forceStringEncoding);
 		} else if (binary) {
 			//numeric types in binary are coded like this
@@ -344,7 +361,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 				return;
 			}
 		}
-		if (binary && (type == IsoType.BINARY || type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN)) {
+		if (binary && (type == IsoType.BINARY || type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN || type == IsoType.LLLLLBIN)) {
 			int missing = 0;
 			if (value instanceof byte[]) {
 				outs.write((byte[])value);

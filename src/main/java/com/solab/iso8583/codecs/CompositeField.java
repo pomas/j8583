@@ -128,6 +128,8 @@ public class CompositeField implements CustomBinaryField<CompositeField>, Serial
                         pos+=3;
                     } else if (v.getType() == IsoType.LLLLBIN || v.getType() == IsoType.LLLLVAR) {
                         pos+=4;
+                    } else if (v.getType() == IsoType.LLLLLBIN || v.getType() == IsoType.LLLLLVAR){
+                        pos+=5;
                     }
                     vals.add(v);
                 }

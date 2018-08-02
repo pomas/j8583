@@ -1,0 +1,10 @@
+<j8583-config>
+  <template type="0100">
+    <field num="2" type="LLLLLVAR">X</field>
+    <field num="3" type="LLLLLBIN">FF</field>
+  </template>
+  <parse type="0100">
+    <field num="2" type="LLLLLVAR" />
+    <field num="3" type="LLLLLBIN" />
+  </parse>
+</j8583-config>

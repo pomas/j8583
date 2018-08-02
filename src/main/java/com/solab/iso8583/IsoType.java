@@ -41,6 +41,10 @@ public enum IsoType {
 	LLVAR(false, 0),
 	/** A variable length alphanumeric value with a 3-digit header length. */
 	LLLVAR(false, 0),
+	/** variable length with 4-digit header length. */
+	LLLLVAR(false, 0),
+	/** variable length width 5-digit header length */
+	LLLLLVAR(false, 0),
 	/** A date in format YYYYMMddHHmmss */
 	DATE14(false, 14),
 	/** A date in format MMddHHmmss */
@@ -59,14 +63,14 @@ public enum IsoType {
 	LLBIN(false, 0),
 	/** Similar to LLLVAR but holds byte arrays instead of strings. */
 	LLLBIN(false, 0),
-    /** variable length with 4-digit header length. */
-    LLLLVAR(false, 0),
-    /** variable length byte array with 4-digit header length. */
-    LLLLBIN(false, 0),
-    /** Date in format yyMMddHHmmss. */
-    DATE12(false,12),
-    /** Date in format yyMMdd */
-    DATE6(false,6);
+	/** variable length byte array with 4-digit header length. */
+	LLLLBIN(false, 0),
+	/** variable length byte array with 5-digit header length.*/
+	LLLLLBIN(false, 0),
+	/** Date in format yyMMddHHmmss. */
+	DATE12(false,12),
+	/** Date in format yyMMdd */
+	DATE6(false,6);
 
 	private boolean needsLen;
 	private int length;
@@ -126,7 +130,7 @@ public enum IsoType {
 	        } else {
 	        	return String.format(String.format("%%-%ds", length), value);
 	        }
-		} else if (this == LLVAR || this == LLLVAR || this == LLLLVAR) {
+		} else if (this == LLVAR || this == LLLVAR || this == LLLLVAR || this == LLLLLVAR) {
 			return value;
 		} else if (this == NUMERIC) {
 	        char[] c = new char[length];
@@ -164,7 +168,7 @@ public enum IsoType {
 	        }
 	        return new String(c);
 
-		} else if (this == LLBIN || this == LLLBIN || this == LLLLBIN) {
+		} else if (this == LLBIN || this == LLLBIN || this == LLLLBIN || this == LLLLLBIN) {
 			return value;
 		}
 		throw new IllegalArgumentException("Cannot format String as " + this);
