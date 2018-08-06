@@ -280,7 +280,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
         final int digits;
         if(type == IsoType.LLLLLBIN || type == IsoType.LLLLLVAR){
         		digits = 5;
-				} else if (type == IsoType.LLLLBIN || type == IsoType.LLLLVAR) {
+		} else if (type == IsoType.LLLLBIN || type == IsoType.LLLLVAR) {
             digits = 4;
         } else if (type == IsoType.LLLBIN || type == IsoType.LLLVAR) {
             digits = 3;
@@ -288,10 +288,10 @@ public class IsoValue<T> implements Cloneable, Serializable {
             digits = 2;
         }
         if (binary) {
-        		if(digits == 5){
-        			outs.write((((l % 100000) / 10000) << 4) | ((l % 10000)/1000));
-						} else if (digits == 4) {
-                outs.write((((l % 10000) / 1000) << 4) | ((l % 1000)/100));
+			if(digits == 5){
+				outs.write((((l % 100000) / 10000) << 4) | ((l % 10000)/1000) | ((l % 1000)/100));
+			} else if (digits == 4) {
+				outs.write((((l % 10000) / 1000) << 4) | ((l % 1000)/100));
             } else if (digits == 3) {
                 outs.write(l / 100); //00 to 09 automatically in BCD
             }
@@ -307,15 +307,16 @@ public class IsoValue<T> implements Cloneable, Serializable {
             } else if (ldiff == 3) {
                 lhead = "000" + lhead;
             } else if (ldiff == 4) {
-            		lhead = "0000" + lhead;
-						}
+				lhead = "0000" + lhead;
+			}
             outs.write(encoding == null ? lhead.getBytes():lhead.getBytes(encoding));
         } else {
             //write the length in ASCII
-						if(digits == 5){
-							outs.write((l/10000)+48);
-							outs.write(((l%10000)/1000)+48);
-						} else if (digits == 4) {
+			if(digits == 5){
+				outs.write((l/10000)+48);
+				outs.write(((l%10000)/1000)+48);
+				outs.write(((l%1000)/100)+48);
+			} else if (digits == 4) {
                 outs.write((l/1000)+48);
                 outs.write(((l%1000)/100)+48);
             } else if (digits == 3) {
