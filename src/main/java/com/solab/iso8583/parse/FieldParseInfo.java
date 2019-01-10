@@ -127,6 +127,8 @@ public abstract class FieldParseInfo implements Serializable {
 			fpi = new LllvarParseInfo();
 		} else if (t == IsoType.LLVAR) {
 			fpi = new LlvarParseInfo();
+		} else if (t == IsoType.LVAR) {
+			fpi = new LvarParseInfo();
 		} else if (t == IsoType.NUMERIC) {
 			fpi = new NumericParseInfo(len);
 		} else if (t == IsoType.TIME) {
@@ -153,6 +155,8 @@ public abstract class FieldParseInfo implements Serializable {
             return Integer.parseInt(new String(buf, pos, digits, encoding), 10);
         } else {
             switch(digits) {
+				case 1:
+					return (buf[pos] - 48);
                 case 2:
                     return ((buf[pos] - 48) * 10) + (buf[pos + 1] - 48);
                 case 3:
@@ -161,10 +165,10 @@ public abstract class FieldParseInfo implements Serializable {
                 case 4:
                     return ((buf[pos] - 48) * 1000) + ((buf[pos + 1] - 48) * 100)
                             + ((buf[pos + 2] - 48) * 10) + (buf[pos + 3] - 48);
-								case 5:
-										return ((buf[pos] - 48) * 10000) + ((buf[pos + 1] - 48) * 1000)
-												+ ((buf[pos + 2] - 48) * 100) + ((buf[pos + 3] - 48) * 10)
-												+ (buf[pos + 4] - 48);
+				case 5:
+					return ((buf[pos] - 48) * 10000) + ((buf[pos + 1] - 48) * 1000)
+							+ ((buf[pos + 2] - 48) * 100) + ((buf[pos + 3] - 48) * 10)
+							+ (buf[pos + 4] - 48);
             }
         }
         return -1;

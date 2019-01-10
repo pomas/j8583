@@ -63,7 +63,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 		encoder = custom;
 		type = t;
 		this.value = value;
-		if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
+		if (type == IsoType.LVAR || type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
 			if (custom == null) {
 				length = value.toString().length();
 			} else {
@@ -73,7 +73,9 @@ public class IsoValue<T> implements Cloneable, Serializable {
 				}
 				length = enc.length();
 			}
-			if (t == IsoType.LLVAR && length > 99) {
+			if (t == IsoType.LVAR && length > 9) {
+				throw new IllegalArgumentException("LVAR can only hold values up to 9 chars");
+			} else if (t == IsoType.LLVAR && length > 99) {
 				throw new IllegalArgumentException("LLVAR can only hold values up to 99 chars");
 			} else if (t == IsoType.LLLVAR && length > 999) {
 				throw new IllegalArgumentException("LLLVAR can only hold values up to 999 chars");
@@ -130,11 +132,13 @@ public class IsoValue<T> implements Cloneable, Serializable {
 		encoder = custom;
 		if (length == 0 && t.needsLength()) {
 			throw new IllegalArgumentException(String.format("Length must be greater than zero for type %s (value '%s')", t, val));
-		} else if (t == IsoType.LLVAR || t == IsoType.LLLVAR || t == IsoType.LLLLVAR || t == IsoType.LLLLLVAR) {
+		} else if (t == IsoType.LVAR || t == IsoType.LLVAR || t == IsoType.LLLVAR || t == IsoType.LLLLVAR || t == IsoType.LLLLLVAR) {
 			if (len == 0) {
 				length = custom == null ? val.toString().length() : custom.encodeField(value).length();
 			}
-			if (t == IsoType.LLVAR && length > 99) {
+			if (t == IsoType.LVAR && length > 9) {
+				throw new IllegalArgumentException("LVAR can only hold values up to 9 chars");
+			} else if (t == IsoType.LLVAR && length > 99) {
 				throw new IllegalArgumentException("LLVAR can only hold values up to 99 chars");
 			} else if (t == IsoType.LLLVAR && length > 999) {
 				throw new IllegalArgumentException("LLLVAR can only hold values up to 999 chars");
@@ -220,7 +224,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
 			}
 		} else if (type == IsoType.ALPHA) {
 			return type.format(encoder == null ? value.toString() : encoder.encodeField(value), length);
-		} else if (type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
+		} else if (type == IsoType.LVAR || type == IsoType.LLVAR || type == IsoType.LLLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
 			return encoder == null ? value.toString() : encoder.encodeField(value);
 		} else if (value instanceof Date) {
 			return type.format((Date)value, tz);
@@ -284,8 +288,10 @@ public class IsoValue<T> implements Cloneable, Serializable {
             digits = 4;
         } else if (type == IsoType.LLLBIN || type == IsoType.LLLVAR) {
             digits = 3;
+		} else if (type == IsoType.LLBIN || type == IsoType.LLVAR) {
+			digits = 2;
         } else {
-            digits = 2;
+            digits = 1;
         }
         if (binary) {
 			if(digits == 5){
@@ -339,7 +345,7 @@ public class IsoValue<T> implements Cloneable, Serializable {
      * for variable-length fields to be done with the proper character encoding. When false,
      * the length headers are encoded as ASCII; this used to be the only behavior. */
 	public void write(final OutputStream outs, final boolean binary, final boolean forceStringEncoding) throws IOException {
-		if (type == IsoType.LLLVAR || type == IsoType.LLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
+		if (type == IsoType.LLLVAR || type == IsoType.LVAR || type == IsoType.LLVAR || type == IsoType.LLLLVAR || type == IsoType.LLLLLVAR) {
             writeLengthHeader(length, outs, type, binary, forceStringEncoding);
 		} else if (type == IsoType.LLBIN || type == IsoType.LLLBIN || type == IsoType.LLLLBIN || type == IsoType.LLLLLBIN) {
             writeLengthHeader(binary ? length : length*2, outs, type, binary, forceStringEncoding);

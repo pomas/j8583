@@ -488,7 +488,9 @@ public class MessageFactory<T extends IsoMessage> {
 							} else {
 								pos += val.getLength();
 							}
-							if (val.getType() == IsoType.LLVAR || val.getType() == IsoType.LLBIN) {
+							if (val.getType() == IsoType.LVAR ) {
+								pos += 0;
+							}else if (val.getType() == IsoType.LLVAR || val.getType() == IsoType.LLBIN) {
 								pos++;
 							} else if (
 									val.getType() == IsoType.LLLVAR
@@ -524,7 +526,9 @@ public class MessageFactory<T extends IsoMessage> {
 						m.setField(i, val);
 						//To get the correct next position, we need to get the number of bytes, not chars
 						pos += val.toString().getBytes(fpi.getCharacterEncoding()).length;
-						if (val.getType() == IsoType.LLVAR || val.getType() == IsoType.LLBIN) {
+						if (val.getType() == IsoType.LVAR) {
+							pos += 1;
+						} else if (val.getType() == IsoType.LLVAR || val.getType() == IsoType.LLBIN) {
 							pos += 2;
 						} else if (val.getType() == IsoType.LLLVAR || val.getType() == IsoType.LLLBIN) {
 							pos += 3;

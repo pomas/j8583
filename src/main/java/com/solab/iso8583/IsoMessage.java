@@ -482,7 +482,9 @@ public class IsoMessage implements Serializable {
             IsoValue<?> v = fields[i];
             if (v != null) {
                 String desc = v.toString();
-                if (v.getType() == IsoType.LLBIN || v.getType() == IsoType.LLVAR) {
+                if (v.getType() == IsoType.LVAR) {
+                    sb.append(String.format("%01d", desc.length()));
+                } else if (v.getType() == IsoType.LLBIN || v.getType() == IsoType.LLVAR) {
                     sb.append(String.format("%02d", desc.length()));
                 } else if (v.getType() == IsoType.LLLBIN || v.getType() == IsoType.LLLVAR) {
                     sb.append(String.format("%03d", desc.length()));
